@@ -92,3 +92,6 @@ sw.*
 # vscode
 .vscode/
 
+
+# Docker Data
+data-presist
