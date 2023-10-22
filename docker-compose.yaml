@@ -1,0 +1,17 @@
+services:
+  redis-service:
+    container_name: "redis"
+    image: redis/redis-stack:latest
+    ports:
+        - "6379:6379"
+        - "8001:8001"
+    volumes:
+        - ./data-presist/redis:/data
+
+  mongodb-service:
+    container_name: "mongodb"
+    image: mongodb/mongodb-community-server:latest
+    ports:
+        - "27017:27017"
+    volumes:
+        - ./data-presist/mongodb:/data/db
