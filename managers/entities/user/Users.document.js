@@ -1,6 +1,5 @@
 // External Libs
-import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -87,5 +86,4 @@ UserSchema.index({ email: 1, type: 1 });
 
 const UsersDocument = mongoose.model("users", UserSchema);
 
-export default UsersDocument;
-export { UserType };
+module.exports = { UsersDocument, UserType };

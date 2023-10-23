@@ -1,6 +1,6 @@
-import ClassroomsDocument from "../classroom/Classrooms.document";
-import ClassroomsManager from "../classroom/Classrooms.manager";
-import SchoolsDocument from "./Schools.document";
+const UsersManager = new (require("../user/Users.manager"))();
+const ClassroomsManager = new (require("../classroom/Classrooms.manager"))();
+const SchoolsDocument = require("./Schools.document");
 
 class SchoolsManager {
 	async Create({ name }, { session }) {
@@ -13,6 +13,12 @@ class SchoolsManager {
 
 	async FindById({ id }) {
 		const result = await SchoolsDocument.findById(id).lean().exec();
+
+		return result;
+	}
+
+	async FindAll() {
+		const result = await SchoolsDocument.find({}).lean().exec();
 
 		return result;
 	}
@@ -31,18 +37,16 @@ class SchoolsManager {
 	}
 
 	async FindByIdAndDelete({ id }, { session }) {
-		const has_classrooms = await ClassroomsManager.FindOneBySchoolId({
+		const has_classrooms = await ClassroomsManager.FindIfExists({
 			school_id: id,
-		})
-			.lean()
-			.exec();
+		});
 
 		if (has_classrooms)
 			throw new Error("Cannot delete school with classrooms");
 
-		const has_students = await UsersDocument.exists({ school_id: id })
-			.lean()
-			.exec();
+		const has_students = await UsersManager.FindIfExists({
+			school_id: id,
+		});
 
 		if (has_students) throw new Error("Cannot delete school with students");
 
@@ -56,4 +60,4 @@ class SchoolsManager {
 	}
 }
 
-export default new SchoolsManager();
+module.exports = SchoolsManager;

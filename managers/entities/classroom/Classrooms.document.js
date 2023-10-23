@@ -1,5 +1,6 @@
 // External Libs
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
+
 const Schema = mongoose.Schema;
 
 const ClassroomSchema = new Schema(
@@ -39,4 +40,4 @@ const ClassroomSchema = new Schema(
 
 const ClassroomsDocument = mongoose.model("classrooms", ClassroomSchema);
 
-export default ClassroomsDocument;
+module.exports = ClassroomsDocument;

@@ -1,4 +1,4 @@
-import UsersDocument, { UserType } from "./Users.document";
+const { UsersDocument, UserType } = require("./Users.document");
 
 class UsersManager {
 	#ValidatePassword(password) {
@@ -46,6 +46,20 @@ class UsersManager {
 
 	async FindById({ id }) {
 		const result = await UsersDocument.findById(id).lean().exec();
+
+		return result;
+	}
+
+	async FindIfExists(filter_query) {
+		const result = await UsersDocument.findOne(filter_query).lean().exec();
+
+		return result ? true : false;
+	}
+
+	async FindAll({ school_id, classroom_id = undefined }) {
+		const result = await UsersDocument.find({ school_id, classroom_id })
+			.lean()
+			.exec();
 
 		return result;
 	}
@@ -105,22 +119,6 @@ class UsersManager {
 
 		return result;
 	}
-
-	async FindOneBySchoolId({ school_id }) {
-		const result = await UsersDocument.findByIdAndDelete({ school_id })
-			.lean()
-			.exec();
-
-		return result;
-	}
-
-	async FindOneByClassroomId({ classroom_id }) {
-		const result = await UsersDocument.findByIdAndDelete({ classroom_id })
-			.lean()
-			.exec();
-
-		return result;
-	}
 }
 
-export default new UsersManager();
+module.exports = UsersManager;

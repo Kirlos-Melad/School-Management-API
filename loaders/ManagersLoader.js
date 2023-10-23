@@ -13,6 +13,7 @@ const TokenManager = require("../managers/token/Token.manager");
 const SharkFin = require("../managers/shark_fin/SharkFin.manager");
 const TimeMachine = require("../managers/time_machine/TimeMachine.manager");
 const MiddlewareManager = require("../mws/Middleware.manager");
+const MongoLoader = require("./MongoLoader");
 
 /**
  * load sharable modules
@@ -46,11 +47,11 @@ module.exports = class ManagersLoader {
 			customValidators: require("../managers/_common/schema.validators"),
 		});
 		const resourceMeshLoader = new ResourceMeshLoader({});
-		// const mongoLoader      = new MongoLoader({ schemaExtension: "mongoModel.js" });
+		const mongoLoader = new MongoLoader({ schemaExtension: "manager.js" });
 
 		this.validators = validatorsLoader.load();
 		this.resourceNodes = resourceMeshLoader.load();
-		// this.mongomodels          = mongoLoader.load();
+		this.mongo_managers = mongoLoader.load();
 	}
 
 	load() {
@@ -69,6 +70,13 @@ module.exports = class ManagersLoader {
 		this.managers.timeMachine = new TimeMachine(this.injectable);
 		this.managers.token = new TokenManager(this.injectable);
 		this.managers.middleware = new MiddlewareManager(this.injectable);
+		this.managers.mongo = Object.entries(this.mongo_managers).reduce(
+			(prev, [key, value]) => {
+				prev[key.toLowerCase()] = new value(this.injectable);
+                return prev;
+			},
+			{},
+		);
 		/*************************************************************************************************/
 		this.managers.mwsExec = new VirtualStack({
 			...{ preStack: [/* '__token', */ "__device"] },

@@ -1,5 +1,5 @@
 // External Libs
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -35,4 +35,4 @@ const SchoolSchema = new Schema(
 
 const SchoolsDocument = mongoose.model("schools", SchoolSchema);
 
-export default SchoolsDocument;
+module.exports = SchoolsDocument;
