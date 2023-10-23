@@ -29,7 +29,7 @@ module.exports = class ApiHandler {
 		// console.log(`# Http API`);
 		Object.keys(this.managers).forEach((mk) => {
 			if (this.managers[mk][this.prop]) {
-				console.log("managers - mk ", this.managers[mk]);
+				//console.log("managers - mk ", this.managers[mk]);
 				this.methodMatrix[mk] = {};
 				// console.log(`## ${mk}`);
 				this.managers[mk][this.prop].forEach((i) => {
@@ -60,7 +60,7 @@ module.exports = class ApiHandler {
 					});
 					/** building middlewares stack */
 
-					console.log(params);
+					//console.log(params);
 
 					params.forEach((param) => {
 						if (!this.mwsStack[`${mk}.${fnName}`]) {
@@ -81,7 +81,7 @@ module.exports = class ApiHandler {
 						}
 					});
 
-					console.log(`* ${i} :`, "args=", params);
+					//console.log(`* ${i} :`, "args=", params);
 				});
 			}
 		});
@@ -160,7 +160,7 @@ module.exports = class ApiHandler {
 			});
 		}
 
-		console.log(`${moduleName}.${fnName}`);
+		//console.log(`${moduleName}.${fnName}`);
 
 		let targetStack = this.mwsStack[`${moduleName}.${fnName}`];
 

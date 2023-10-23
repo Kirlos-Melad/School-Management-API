@@ -4,9 +4,20 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UserType = Object.freeze({
+	SUPER_ADMIN: "super_admin",
+	SCHOOL_ADMIN: "school_admin",
 	STUDENT: "student",
-	ADMIN: "admin",
 });
+
+const AuthInfoSchema = new Schema(
+	{
+		devices: {
+			type: [String],
+			default: [],
+		},
+	},
+	{ timestamps: false, versionKey: false },
+);
 
 const UserSchema = new Schema(
 	{
@@ -62,6 +73,14 @@ const UserSchema = new Schema(
 			default: null,
 		},
 
+		auth_info: {
+			type: AuthInfoSchema,
+
+			default: {
+				devices: [],
+			},
+		},
+
 		created_at: Number,
 		updated_at: Number,
 	},
@@ -82,7 +101,7 @@ const UserSchema = new Schema(
 );
 
 // Create Composite key (Email, Type)
-UserSchema.index({ email: 1, type: 1 });
+UserSchema.index({ email: 1, type: 1 }, { unique: 1 });
 
 const UsersDocument = mongoose.model("users", UserSchema);
 

@@ -1,4 +1,5 @@
 const { UsersDocument, UserType } = require("./Users.document");
+const bcrypt = require("bcrypt");
 
 class UsersManager {
 	#ValidatePassword(password) {
@@ -9,6 +10,7 @@ class UsersManager {
 			throw new Error("Password must be at least 8 characters");
 		if (password.length > 100)
 			throw new Error("Password must be at most 100 characters");
+		return true;
 	}
 
 	#HashPassword(password) {
@@ -57,7 +59,10 @@ class UsersManager {
 	}
 
 	async FindAll({ school_id, classroom_id = undefined }) {
-		const result = await UsersDocument.find({ school_id, classroom_id })
+		const result = await UsersDocument.find(
+			{ school_id, classroom_id },
+			{ password: 0 },
+		)
 			.lean()
 			.exec();
 
@@ -81,11 +86,13 @@ class UsersManager {
 
 	async FindByIdAndUpdate(
 		{ id },
-		{ name, email, password, classroom_id },
+		{ name, email, password, classroom_id, device_id },
 		{ session },
 	) {
 		password =
-			this.#ValidatePassword(password) && this.#HashPassword(password);
+			password &&
+			this.#ValidatePassword(password) &&
+			this.#HashPassword(password);
 
 		// Get the user
 		const result = await UsersDocument.findByIdAndUpdate(
@@ -95,6 +102,7 @@ class UsersManager {
 				email,
 				password,
 				classroom_id,
+				$addToSet: { "auth_info.devices": device_id },
 			},
 			// Update then return the new record by using {new: true}
 			{ new: true, runValidators: true, session },
