@@ -8,7 +8,7 @@ const SchoolSchema = new Schema(
 		name: {
 			type: String,
 			required: [true, "{PATH} not found"],
-
+			unique: true,
 			//? Using /managers/_common/schema.models.js validation
 			minLength: [3, "{PATH} must be at least {MINLENGTH} characters"],
 			maxLength: [20, "{PATH} must be at most {MAXLENGTH} characters"],

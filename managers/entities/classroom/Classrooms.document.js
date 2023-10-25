@@ -8,6 +8,7 @@ const ClassroomSchema = new Schema(
 		school_id: {
 			type: Schema.Types.ObjectId,
 			required: [true, "{PATH} not found"],
+			immutable: true,
 		},
 
 		name: {
@@ -37,6 +38,8 @@ const ClassroomSchema = new Schema(
 		versionKey: false,
 	},
 );
+
+ClassroomSchema.index({ school_id: 1, name: 1 }, { unique: true });
 
 const ClassroomsDocument = mongoose.model("classrooms", ClassroomSchema);
 

@@ -6,12 +6,12 @@ services:
         - "6379:6379"
         - "8001:8001"
     volumes:
-        - ./data-presist/redis:/data
+        - ./data-persist/redis:/data
 
   mongodb-service:
     container_name: "mongodb"
-    image: mongodb/mongodb-community-server:latest
+    image: mongo:latest
     ports:
         - "27017:27017"
     volumes:
-        - ./data-presist/mongodb:/data/db
+        - ./data-persist/mongodb:/data/db

@@ -9,19 +9,8 @@ const UserType = Object.freeze({
 	STUDENT: "student",
 });
 
-const AuthInfoSchema = new Schema(
-	{
-		devices: {
-			type: [String],
-			default: [],
-		},
-	},
-	{ timestamps: false, versionKey: false },
-);
-
 const UserSchema = new Schema(
 	{
-		//TODO: check if attribute if valid and what is userKey?
 		type: {
 			type: String,
 			enum: {
@@ -29,6 +18,7 @@ const UserSchema = new Schema(
 				message: "{VALUE} is not supported",
 			},
 			required: [true, "{PATH} not found"],
+			immutable: true,
 		},
 
 		name: {
@@ -65,7 +55,7 @@ const UserSchema = new Schema(
 
 		school_id: {
 			type: Schema.Types.ObjectId,
-			required: [true, "{PATH} not found"],
+			default: null,
 		},
 
 		classroom_id: {
@@ -73,12 +63,9 @@ const UserSchema = new Schema(
 			default: null,
 		},
 
-		auth_info: {
-			type: AuthInfoSchema,
-
-			default: {
-				devices: [],
-			},
+		devices: {
+			type: [String],
+			default: [],
 		},
 
 		created_at: Number,

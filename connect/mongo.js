@@ -12,10 +12,10 @@ module.exports = ({ uri }) => {
 	mongoose.connection.on("connected", async function () {
 		console.log("💾  Mongoose default connection open to " + uri);
 
-		console.log("🚨  DROPPING DATABASE PLEASE REMOVE IN PRODUCTION");
+		// console.log("🚨  DROPPING DATABASE PLEASE REMOVE IN PRODUCTION");
 
-		const result = await mongoose.connection.db.dropDatabase();
-		console.log(`🚨  DROPPED DATABASE: ${result}`);
+		// const result = await mongoose.connection.db.dropDatabase();
+		// console.log(`🚨  DROPPED DATABASE: ${result}`);
 	});
 
 	// If the connection throws an error

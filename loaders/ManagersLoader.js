@@ -12,8 +12,12 @@ const systemArch = require("../static_arch/main.system");
 const TokenManager = require("../managers/token/Token.manager");
 const SharkFin = require("../managers/shark_fin/SharkFin.manager");
 const TimeMachine = require("../managers/time_machine/TimeMachine.manager");
-const MiddlewareManager = require("../mws/Middleware.manager");
+//const MiddlewareManager = require("../mws/Middleware.manager");
 const MongoLoader = require("./MongoLoader");
+const UsersManager = require("../managers/entities/user/Users.manager");
+const SchoolsManager = require("../managers/entities/school/Schools.manager");
+const ClassroomsManager = require("../managers/entities/classroom/Classrooms.manager");
+const ManagersMediator = require("../managers/entities/ManagersMediator.manager");
 
 /**
  * load sharable modules
@@ -47,11 +51,11 @@ module.exports = class ManagersLoader {
 			customValidators: require("../managers/_common/schema.validators"),
 		});
 		const resourceMeshLoader = new ResourceMeshLoader({});
-		const mongoLoader = new MongoLoader({ schemaExtension: "manager.js" });
+		//const mongoLoader = new MongoLoader({ schemaExtension: "manager.js" });
 
 		this.validators = validatorsLoader.load();
 		this.resourceNodes = resourceMeshLoader.load();
-		this.mongo_managers = mongoLoader.load();
+		//this.mongo_managers = mongoLoader.load();
 	}
 
 	load() {
@@ -69,14 +73,25 @@ module.exports = class ManagersLoader {
 		});
 		this.managers.timeMachine = new TimeMachine(this.injectable);
 		this.managers.token = new TokenManager(this.injectable);
-		this.managers.middleware = new MiddlewareManager(this.injectable);
-		this.managers.mongo = Object.entries(this.mongo_managers).reduce(
-			(prev, [key, value]) => {
-				prev[key.toLowerCase()] = new value(this.injectable);
-                return prev;
-			},
-			{},
-		);
+		//this.managers.middleware = new MiddlewareManager(this.injectable);
+		// this.managers.mongo = Object.entries(this.mongo_managers).reduce(
+		// 	(prev, [key, value]) => {
+		// 		prev[key.toLowerCase()] = new value(this.injectable);
+		// 		return prev;
+		// 	},
+		// 	{},
+		// );
+
+		this.managers.managersMediator = new ManagersMediator({
+			...this.injectable,
+			UsersManager: new UsersManager(this.injectable),
+			SchoolsManager: new SchoolsManager(this.injectable),
+			ClassroomsManager: new ClassroomsManager(this.injectable),
+		});
+
+		this.managers.users = new UsersManager(this.injectable);
+		this.managers.schools = new SchoolsManager(this.injectable);
+		this.managers.classrooms = new ClassroomsManager(this.injectable);
 		/*************************************************************************************************/
 		this.managers.mwsExec = new VirtualStack({
 			...{ preStack: [/* '__token', */ "__device"] },

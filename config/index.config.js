@@ -33,6 +33,8 @@ const LONG_TOKEN_SECRET = process.env.LONG_TOKEN_SECRET || null;
 const SHORT_TOKEN_SECRET = process.env.SHORT_TOKEN_SECRET || null;
 const NACL_SECRET = process.env.NACL_SECRET || null;
 
+const SUPER_ADMIN_SECRET = process.env.SUPER_ADMIN_SECRET || null;
+
 if (!LONG_TOKEN_SECRET || !SHORT_TOKEN_SECRET || !NACL_SECRET) {
 	throw Error("missing .env variables check index.config");
 }
@@ -53,6 +55,7 @@ config.dotEnv = {
 	ADMIN_URL,
 	LONG_TOKEN_SECRET,
 	SHORT_TOKEN_SECRET,
+	SUPER_ADMIN_SECRET,
 };
 
 module.exports = config;
